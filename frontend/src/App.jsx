@@ -1,10 +1,16 @@
 import "./App.css";
-import Navbars from "./components/Navbars";
+import AddItem from "./components/AddItem";
+import Box from "./components/Box";
+import Cards from "./components/Cards";
+import Header from "./components/Header";
 
 const App = () => {
   return (
     <div>
-      <Navbars />
+      <Header />
+      <Box />
+      <AddItem />
+      <Cards />
     </div>
   );
 };

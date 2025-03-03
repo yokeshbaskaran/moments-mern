@@ -1,6 +1,6 @@
 import { Container, Row } from "react-bootstrap";
 
-import SingleCard from "./SingleCard";
+import SingleCard from "../components/SingleCard";
 
 const Cards = () => {
   return (

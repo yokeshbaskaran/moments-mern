@@ -1,19 +1,39 @@
 import "./App.css";
-import AddItem from "./components/AddItem";
-import Box from "./components/Box";
-import Cards from "./components/Cards";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import { Route, Routes } from "react-router-dom";
+import AuthPage from "./pages/AuthPage";
+import Home from "./pages/Home";
+import Loader from "./components/Loader";
+import { useEffect, useState } from "react";
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time (e.g., fetch data)
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <Loader />
+      </>
+    );
+  }
+
   return (
-    <div>
+    <>
       <Header />
-      <Box />
-      <AddItem />
-      <Cards />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="auth" element={<AuthPage />} />
+      </Routes>
       <Footer />
-    </div>
+    </>
   );
 };
 

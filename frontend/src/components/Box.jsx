@@ -2,8 +2,7 @@ const Box = () => {
   return (
     <div
       style={{
-        background:
-          "linear-gradient(to right, #4facfe,rgba(182, 0, 254, 0.89))",
+        background: "linear-gradient(to right,#4facfe,#b600fe)",
         padding: "3rem 1rem",
         textAlign: "left",
         color: "white",

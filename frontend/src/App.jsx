@@ -1,11 +1,11 @@
 import "./App.css";
+import { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Route, Routes } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import Home from "./pages/Home";
 import Loader from "./components/Loader";
-import { useEffect, useState } from "react";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -16,14 +16,14 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading) {
-    return (
-      <>
-        <Header />
-        <Loader />
-      </>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <>
+  //       <Header />
+  //       <Loader />
+  //     </>
+  //   );
+  // }
 
   return (
     <>

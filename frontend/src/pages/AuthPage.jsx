@@ -6,31 +6,44 @@ import Form from "react-bootstrap/Form";
 
 const AuthPage = () => {
   const [auth, setAuth] = useState(false);
-  const [password, setPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [formData, setFormData] = useState([
-    {
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      confirmpassword: "",
-    },
-  ]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (auth) {
-      console.log("registered", formData);
+      console.log("logined");
+      const data = {
+        email,
+        password,
+      };
+      setEmail("");
+      setPassword("");
+      console.log(data);
     } else {
-      console.log("logined", formData);
+      if (password == confirmPassword) {
+        const data = {
+          firstname,
+          lastname,
+          email,
+          password,
+          confirmPassword,
+        };
+
+        setFirstname("");
+        setLastname("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        console.log(data);
+      }
     }
   };
 
@@ -46,8 +59,10 @@ const AuthPage = () => {
       <div className="p-5">
         {auth ? (
           <Card>
+            {/* LOGIN */}
+
             <Card.Header>
-              <h2 className="foot-text">Login here</h2>
+              <h2>Login here</h2>
             </Card.Header>
             <Card.Body>
               <Form onSubmit={handleSubmit}>
@@ -55,15 +70,18 @@ const AuthPage = () => {
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
-                    name="firstname"
-                    value={formData.firstname}
-                    onChange={handleChange}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" />
+                  <Form.Control
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </Form.Group>
 
                 <Stack direction="horizontal" gap={3}>
@@ -80,37 +98,55 @@ const AuthPage = () => {
           </Card>
         ) : (
           <Card>
+            {/* Register */}
+
             <Card.Header>
-              <h2 className="foot-text">Register here</h2>
+              <h2>Register here</h2>
             </Card.Header>
             <Card.Body>
               <Form onSubmit={handleSubmit}>
                 <Row>
                   <Form.Group className="mb-3 col-md-6">
                     <Form.Label>First Name</Form.Label>
-                    <Form.Control type="email" />
+                    <Form.Control
+                      type="text"
+                      value={firstname}
+                      onChange={(e) => setFirstname(e.target.value)}
+                    />
                   </Form.Group>
 
                   <Form.Group className="mb-3 col-md-6">
                     <Form.Label>Last Name</Form.Label>
-                    <Form.Control type="email" />
+                    <Form.Control
+                      type="text"
+                      value={lastname}
+                      onChange={(e) => setLastname(e.target.value)}
+                    />
                   </Form.Group>
                 </Row>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" />
+                  <Form.Control
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </Form.Group>
 
                 <Form.Group>
                   <Form.Label>Password</Form.Label>
 
                   <InputGroup className="mb-3">
-                    <Form.Control type={password ? "text" : "password"} />
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
 
                     <InputGroup.Text>
-                      <span onClick={() => setPassword(!password)}>
-                        {password ? "hide" : "show"}
+                      <span onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? "hide" : "show"}
                       </span>
                     </InputGroup.Text>
                   </InputGroup>
@@ -121,12 +157,18 @@ const AuthPage = () => {
 
                   <InputGroup className="mb-3">
                     <Form.Control
-                      type={confirmPassword ? "text" : "password"}
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
 
                     <InputGroup.Text>
-                      <span onClick={() => setConfirmPassword(!password)}>
-                        {confirmPassword ? "hide" : "show"}
+                      <span
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                      >
+                        {showConfirmPassword ? "hide" : "show"}
                       </span>
                     </InputGroup.Text>
                   </InputGroup>

@@ -2,35 +2,53 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 
 const AddItem = () => {
   const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
+  const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [fileImg, setFileImg] = useState("");
 
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
 
-    const data = {
-      title,
-      message,
-      tags,
-      fileImg,
-    };
-    console.log(data);
-    setTitle("");
-    setMessage("");
-    setTags("");
-    setFileImg("");
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("tags", tags);
+      formData.append("image", fileImg);
+
+      const response = await axios.post(
+        "http://localhost:3005/api/posts",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response) {
+        console.log("response", response);
+
+        setTitle("");
+        setDescription("");
+        setTags("");
+        setFileImg(null);
+      } else {
+        console.log("failed");
+      }
+    } catch (error) {
+      console.log("Errored" + error.message);
+    }
   };
 
   const handleClear = () => {
     setTitle("");
-    setMessage("");
+    setDescription("");
     setTags("");
-    setFileImg("");
+    setFileImg(null);
   };
 
   return (
@@ -56,11 +74,11 @@ const AddItem = () => {
           </InputGroup>
 
           <InputGroup className="mb-3">
-            <InputGroup.Text id="basic-addon1">Message</InputGroup.Text>
+            <InputGroup.Text id="basic-addon1">description</InputGroup.Text>
             <Form.Control
-              placeholder="enter message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              placeholder="enter description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </InputGroup>
 
@@ -76,8 +94,9 @@ const AddItem = () => {
           <input
             type="file"
             name="img-upload"
-            value={fileImg}
-            onChange={(e) => setFileImg(e.target.value)}
+            accept="image/*"
+            onChange={(e) => setFileImg(e.target.files[0])}
+            required
           />
 
           <Stack direction="horizontal" gap={2} className="my-4">

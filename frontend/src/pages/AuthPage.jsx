@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { InputGroup, Row, Stack } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import axios from "axios";
 
 const AuthPage = () => {
   const [auth, setAuth] = useState(false);
@@ -15,35 +16,62 @@ const AuthPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const API_URL = import.meta.env.VITE_SERVER_URL;
+  // console.log(API_URL);
 
-    if (auth) {
-      console.log("logined");
+  const handleLogin = async () => {
+    const data = {
+      email,
+      password,
+    };
+    // console.log("data", data);
+
+    const response = await axios.post(API_URL + "/login", data);
+
+    if (response) {
+      setEmail("");
+      setPassword("");
+
+      console.log("User is logined");
+    } else {
+      console.log("User not logined");
+    }
+  };
+
+  const handleRegister = async () => {
+    if (password == confirmPassword) {
       const data = {
+        firstname,
+        lastname,
         email,
         password,
       };
-      setEmail("");
-      setPassword("");
-      console.log(data);
-    } else {
-      if (password == confirmPassword) {
-        const data = {
-          firstname,
-          lastname,
-          email,
-          password,
-          confirmPassword,
-        };
 
+      const response = await axios.post(API_URL + "/register", data);
+
+      if (response) {
         setFirstname("");
         setLastname("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
-        console.log(data);
+
+        console.log("User is registered");
+      } else {
+        console.log("User not registered");
       }
+    } else {
+      alert("Password does not match!");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (auth) {
+      handleLogin();
+    } else {
+      handleRegister();
     }
   };
 
@@ -66,7 +94,7 @@ const AuthPage = () => {
             </Card.Header>
             <Card.Body>
               <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3">
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
@@ -75,13 +103,22 @@ const AuthPage = () => {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group>
                   <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+
+                  <InputGroup className="mb-3">
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+
+                    <InputGroup.Text>
+                      <span onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? "hide" : "show"}
+                      </span>
+                    </InputGroup.Text>
+                  </InputGroup>
                 </Form.Group>
 
                 <Stack direction="horizontal" gap={3}>

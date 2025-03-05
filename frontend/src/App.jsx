@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import Home from "./pages/Home";
 import Loader from "./components/Loader";
+import { AppContextProvider } from "./context/AppContext";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -26,14 +27,14 @@ const App = () => {
   // }
 
   return (
-    <>
+    <AppContextProvider>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="auth" element={<AuthPage />} />
       </Routes>
       <Footer />
-    </>
+    </AppContextProvider>
   );
 };
 

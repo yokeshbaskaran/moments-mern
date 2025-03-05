@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const Image = require("../models/Image");
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 //multer
 const storage = multer.diskStorage({
@@ -11,7 +12,54 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.post("/login", () => {});
+router.post("/register", async (req, res) => {
+  try {
+    const { firstname, lastname, email, password } = req.body;
+    const data = { firstname, lastname, email, password };
+    // console.log("client data", data);
+
+    const newUser = await User.create(data);
+    if (newUser) {
+      res.status(201).json({ message: "user created" });
+    } else {
+      console.log("User not created!");
+    }
+  } catch (error) {
+    console.log("Error!" + error.message);
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const data = { email, password };
+    console.log("client data", data);
+
+    const newUser = await User.findOne(data);
+
+    if (newUser) {
+      res.status(200).json({ message: "user logined!!" });
+    } else {
+      console.log("User not logined!!");
+    }
+  } catch (error) {
+    console.log("Error!" + error.message);
+  }
+});
+
+// router.get("/user", async (req, res) => {
+//   try {
+//     const allPosts = await Post.find()
+//       .populate("image")
+//       .sort({ createdAt: -1 });
+
+//     console.log(allPosts);
+
+//     res.status(200).json(allPosts);
+//   } catch (error) {
+//     console.log("Error:" + error.message);
+//   }
+// });
 
 router.post("/posts", upload.single("image"), async (req, res) => {
   try {
@@ -27,15 +75,6 @@ router.post("/posts", upload.single("image"), async (req, res) => {
     await imageUpload.save();
 
     const { title, description, tags } = req.body;
-
-    const data = {
-      title,
-      description,
-      tags,
-    };
-    console.log("client data", tags.split(""));
-
-    const tagsArray = tags.split(" ") || tags.split(",");
 
     const dbData = Post.create({
       title,

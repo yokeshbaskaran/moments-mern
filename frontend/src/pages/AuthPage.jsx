@@ -113,16 +113,16 @@ const AuthPage = () => {
   return (
     <div
       style={{
-        background: "linear-gradient(to right,#4facfe,#b600fe)",
+        background: "linear-gradient(to right, #4facfe, #b600fe)",
         marginTop: "60px",
-        padding: "3rem 1rem",
+        padding: "",
         minHeight: "79vh",
       }}
     >
       {popup.show && <AlertBox color="green" text={popup.message} />}
 
-      <div className="p-5">
-        <Card>
+      <div className={auth ? "px-3 py-5" : "px-3 py-4"}>
+        <Card style={auth ? { marginBlock: "50px" } : { marginTop: "30px" }}>
           <Card.Header>
             <h2>{auth ? "Login here" : "Register here "}</h2>
           </Card.Header>

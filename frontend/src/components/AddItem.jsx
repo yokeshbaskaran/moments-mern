@@ -61,7 +61,7 @@ const AddItem = () => {
     <>
       <div
         style={{
-          background: "linear-gradient(to right,#4facfe,#b600fe)",
+          background: "linear-gradient(to right, #4facfe, #b600fe)",
           padding: "2rem 1rem",
           textAlign: "left",
           color: "white",

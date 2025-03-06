@@ -16,7 +16,7 @@ const Cards = () => {
 
     if (response) {
       const { data } = response;
-      console.log(data);
+      // console.log(data);
       setPosts(data);
     } else {
       console.log("Cannot fetch posts");

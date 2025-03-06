@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
+  const { userData } = useAppContext();
+  console.log("head", userData.firstname, userData.lastname);
+
   return (
     <>
       <Navbar fixed="top" variant="dark" bg="dark" expand="md">
@@ -21,7 +24,17 @@ const Header = () => {
                 Home
               </Nav.Link>
               <Nav.Link as={Link} to="/auth">
-                Login / Signup
+                {userData?.firstname ? (
+                  <span>
+                    Hi,{" "}
+                    <span className="text-capitalize pe-1">
+                      {userData.firstname}
+                    </span>
+                    {userData.lastname}
+                  </span>
+                ) : (
+                  <span>Login / Signup</span>
+                )}
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

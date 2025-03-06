@@ -1,10 +1,10 @@
-import { Card, Col, ListGroup } from "react-bootstrap";
+import { Card, Col } from "react-bootstrap";
+import { getTimeAgo } from "../utlis/helpers";
 
 const SingleCard = ({ post }) => {
   // console.log("Post", post);
 
-  const { _id, title, description, tags, image, createdAt, updatedAt } = post;
-  console.log("tags", createdAt, updatedAt);
+  const { title, description, tags, image, createdAt } = post;
 
   return (
     <>
@@ -22,7 +22,7 @@ const SingleCard = ({ post }) => {
               @user_name
             </div>
 
-            <span>2 yr ago</span>
+            <span>{getTimeAgo(createdAt)}</span>
           </div>
 
           <Card.Img variant="top" src={image.imageUrl} alt="moment-image" />

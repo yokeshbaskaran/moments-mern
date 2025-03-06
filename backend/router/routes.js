@@ -4,6 +4,8 @@ const multer = require("multer");
 const Image = require("../models/Image");
 const Post = require("../models/Post");
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 //multer
 const storage = multer.diskStorage({
@@ -15,7 +17,10 @@ const upload = multer({ storage });
 router.post("/register", async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
-    const data = { firstname, lastname, email, password };
+    const salt = bcrypt.genSaltSync();
+    const hashPwd = bcrypt.hashSync(password, salt);
+
+    const data = { firstname, lastname, email, password: hashPwd };
     // console.log("client data", data);
 
     const newUser = await User.create(data);
@@ -25,20 +30,36 @@ router.post("/register", async (req, res) => {
       console.log("User not created!");
     }
   } catch (error) {
+    res.status(404).json({ message: error.message });
     console.log("Error!" + error.message);
   }
 });
 
 router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-    const data = { email, password };
-    console.log("client data", data);
+    const findUser = await User.findOne({ email });
+    if (!findUser) {
+      console.log("Cannot find user details");
+      // res.status(404).json({ message: "User not found!!" });
+    }
 
-    const newUser = await User.findOne(data);
+    const dehashed = await bcrypt.compare(password, findUser.password);
+    if (!dehashed) {
+      console.log("wrong credentials");
+    }
 
-    if (newUser) {
-      res.status(200).json({ message: "user logined!!" });
+    if (findUser && dehashed) {
+      const { password: hash, ...userData } = findUser._doc;
+
+      const token = jwt.sign(
+        { id: userData._id },
+        process.env.ACCESS_SECRET_TOKEN
+      );
+
+      res
+        .cookie("access_token", token)
+        .json({ user: userData, message: "user logined!!" });
     } else {
       console.log("User not logined!!");
     }
@@ -47,19 +68,19 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// router.get("/user", async (req, res) => {
-//   try {
-//     const allPosts = await Post.find()
-//       .populate("image")
-//       .sort({ createdAt: -1 });
+router.get("/user", async (req, res) => {
+  try {
+    const allPosts = await Post.find()
+      .populate("image")
+      .sort({ createdAt: -1 });
 
-//     console.log(allPosts);
+    // console.log(allPosts);
 
-//     res.status(200).json(allPosts);
-//   } catch (error) {
-//     console.log("Error:" + error.message);
-//   }
-// });
+    res.status(200).json(allPosts);
+  } catch (error) {
+    console.log("Error:" + error.message);
+  }
+});
 
 router.post("/posts", upload.single("image"), async (req, res) => {
   try {
@@ -84,7 +105,6 @@ router.post("/posts", upload.single("image"), async (req, res) => {
     }).populate("image");
 
     if (dbData) {
-      console.log(dbData);
       res.status(201).json(dbData);
     } else {
       console.log("Post not created");
@@ -100,7 +120,7 @@ router.get("/posts", async (req, res) => {
       .populate("image")
       .sort({ createdAt: -1 });
 
-    console.log(allPosts);
+    // console.log(allPosts);
 
     res.status(200).json(allPosts);
   } catch (error) {

@@ -23,7 +23,7 @@ const AuthPage = () => {
   // const [errorPopup, setErrorPopup] = useState({ show: false, message: "" });
   const navigate = useNavigate();
 
-  const { setUserData } = useAppContext();
+  const { setUserData, getUserDetails } = useAppContext();
 
   const handleLogin = async () => {
     try {
@@ -40,6 +40,7 @@ const AuthPage = () => {
         setPopup({ show: true, message: "User logined" });
         //console.log("res data:", response.data);
         setUserData(response.data.user);
+        getUserDetails(); //user-data
         setTimeout(() => {
           setEmail("");
           setPassword("");
@@ -56,6 +57,15 @@ const AuthPage = () => {
 
   const handleRegister = async () => {
     try {
+      if (
+        firstname === "" ||
+        lastname === "" ||
+        email === "" ||
+        password === ""
+      ) {
+        return null;
+      }
+
       if (password == confirmPassword) {
         const data = {
           firstname,
@@ -76,8 +86,10 @@ const AuthPage = () => {
             setPassword("");
             setConfirmPassword("");
 
-            navigate("/");
-          }, 1000);
+            setAuth(!auth);
+            setPopup({ show: false });
+            navigate("/auth");
+          }, 1500);
         }
       } else {
         alert("Password does not match!");
@@ -107,143 +119,6 @@ const AuthPage = () => {
       {popup.show && <AlertBox color="green" text={popup.message} />}
 
       <div className="p-5">
-        {/* {auth ? (
-          <Card> 
-
-            <Card.Header>
-              <h2>Login here</h2>
-            </Card.Header>
-            <Card.Body>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group>
-                  <Form.Label>Password</Form.Label>
-
-                  <InputGroup className="mb-3">
-                    <Form.Control
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-
-                    <InputGroup.Text>
-                      <span onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? "hide" : "show"}
-                      </span>
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-
-                <Stack direction="horizontal" gap={3}>
-                  <Button variant="primary" type="submit">
-                    Login
-                  </Button>
-
-                  <Button variant="secondary" onClick={() => setAuth(false)}>
-                    Create Account?
-                  </Button>
-                </Stack>
-              </Form>
-            </Card.Body>
-          </Card>
-        ) : (
-          <Card> 
-
-            <Card.Header>
-              <h2>Register here</h2>
-            </Card.Header>
-            <Card.Body>
-              <Form onSubmit={handleSubmit}>
-                <Row>
-                  <Form.Group className="mb-3 col-md-6">
-                    <Form.Label>First Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={firstname}
-                      onChange={(e) => setFirstname(e.target.value)}
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3 col-md-6">
-                    <Form.Label>Last Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={lastname}
-                      onChange={(e) => setLastname(e.target.value)}
-                    />
-                  </Form.Group>
-                </Row>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group>
-                  <Form.Label>Password</Form.Label>
-
-                  <InputGroup className="mb-3">
-                    <Form.Control
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-
-                    <InputGroup.Text>
-                      <span onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? "hide" : "show"}
-                      </span>
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Confirm Password</Form.Label>
-
-                  <InputGroup className="mb-3">
-                    <Form.Control
-                      type={showConfirmPassword ? "text" : "password"}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-
-                    <InputGroup.Text>
-                      <span
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                      >
-                        {showConfirmPassword ? "hide" : "show"}
-                      </span>
-                    </InputGroup.Text>
-                  </InputGroup>
-                </Form.Group>
-
-                <Stack direction="horizontal" gap={3}>
-                  <Button variant="primary" type="submit">
-                    Register
-                  </Button>
-
-                  <Button variant="secondary" onClick={() => setAuth(true)}>
-                    Login here?
-                  </Button>
-                </Stack>
-              </Form>
-            </Card.Body>
-          </Card>
-        )} */}
         <Card>
           <Card.Header>
             <h2>{auth ? "Login here" : "Register here "}</h2>
@@ -330,7 +205,7 @@ const AuthPage = () => {
                 </Button>
 
                 <Button variant="secondary" onClick={() => setAuth(!auth)}>
-                  {auth ? "Create Account?" : "Login?"}
+                  {auth ? "Create Account?" : "Login here?"}
                 </Button>
               </Stack>
             </Form>

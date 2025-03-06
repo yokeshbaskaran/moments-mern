@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { createContext, useContext } from "react";
+import Cookies from "js-cookie";
 
 const AppContext = createContext();
 
@@ -14,11 +16,31 @@ export const AppContextProvider = ({ children }) => {
   const [userData, setUserData] = useState([]);
   const [dataChanged, setDataChanged] = useState(false);
 
-  // useEffect(() => {}, [!dataChanged]);
+  useEffect(() => {
+    const myCookie = Cookies.get("access_token");
 
-  const getUserDetails = () => {};
+    if (myCookie) {
+      getUserDetails();
+    }
+  }, []);
 
-  const contextValues = { userData, setUserData };
+  const getUserDetails = async () => {
+    const response = await axios.get(API_URL + "/profile", {
+      withCredentials: true,
+    });
+
+    if (response) {
+      console.log("response data", response.data);
+      setUserData(response.data);
+    }
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("access_token");
+    setUserData([]);
+  };
+
+  const contextValues = { userData, setUserData, getUserDetails, handleLogout };
 
   return (
     <>

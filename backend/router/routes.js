@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
       const { password: hash, ...userData } = findUser._doc;
 
       const token = jwt.sign(
-        { id: userData._id },
+        { user: userData },
         process.env.ACCESS_SECRET_TOKEN
       );
 
@@ -66,6 +66,17 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.log("Error!" + error.message);
   }
+});
+
+router.get("/profile", async (req, res) => {
+  const { access_token } = await req.cookies;
+
+  jwt.verify(access_token, process.env.ACCESS_SECRET_TOKEN, {}, (err, info) => {
+    if (err) throw err;
+
+    // console.log("info", info.user);
+    res.status(200).json(info.user);
+  });
 });
 
 router.get("/user", async (req, res) => {

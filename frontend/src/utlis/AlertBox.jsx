@@ -1,5 +1,5 @@
-import green from "../../public/green.png";
-import red from "../../public/red.png";
+import green from "/green.png";
+import red from "/red.png";
 
 const AlertBox = ({ color, text }) => {
   return (

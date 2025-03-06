@@ -7,11 +7,14 @@ const PORT = 3005 || process.env.PORT;
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 
 const routes = require("./router/routes");
+const auth = require("./middleware/auth");
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: ["http://localhost:5173"],

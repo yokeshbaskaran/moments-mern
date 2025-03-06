@@ -1,36 +1,30 @@
 import { Container, Row } from "react-bootstrap";
 import SingleCard from "../components/SingleCard";
 import { useEffect } from "react";
-import axios from "axios";
-import { useState } from "react";
+import { useAppContext } from "../context/AppContext";
 
 const Cards = () => {
-  const [posts, setPosts] = useState([]);
+  const { posts, fetchPosts } = useAppContext();
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  const fetchPosts = async () => {
-    const response = await axios.get("http://localhost:3005/api/posts");
-
-    if (response) {
-      const { data } = response;
-      // console.log(data);
-      setPosts(data);
-    } else {
-      console.log("Cannot fetch posts");
-    }
-  };
-
   return (
     <Container fluid className="mt-5">
-      <h3 className="text-center mb-4">Memories Captured in camera</h3>
+      <h2 className="text-center mb-4">Moments Captured in camera</h2>
 
       <Row className="justify-content-center">
-        {posts.map((post) => (
-          <SingleCard key={post._id} post={post} />
-        ))}
+        {posts.length > 0 ? (
+          posts.map((post) => <SingleCard key={post._id} post={post} />)
+        ) : (
+          <div className="w-100 my-2 d-flex flex-column justify-content-center align-items-center">
+            <img src="photos.png" alt="home-logo" width={350} height={350} />
+            <h3 className="text-center fst-italic fw-normal">
+              Add Some moments of our life here
+            </h3>
+          </div>
+        )}
       </Row>
     </Container>
   );

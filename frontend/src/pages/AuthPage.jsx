@@ -38,8 +38,11 @@ const AuthPage = () => {
 
       if (response.status === 200) {
         setPopup({ show: true, message: "User logined" });
-        //console.log("res data:", response.data);
-        setUserData(response.data.user);
+
+        const data = response.data.user;
+        // console.log("res data:", data);
+        setUserData(data);
+
         getUserDetails(); //user-data
         setTimeout(() => {
           setEmail("");

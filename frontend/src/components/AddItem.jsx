@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import { useState } from "react";
 import axios from "axios";
+import { API_URL, useAppContext } from "../context/AppContext";
 
 const AddItem = () => {
   const [title, setTitle] = useState("");
@@ -11,8 +12,15 @@ const AddItem = () => {
   const [tags, setTags] = useState("");
   const [fileImg, setFileImg] = useState("");
 
+  const { userData, dataChanged, setDataChanged } = useAppContext();
+  // console.log("user-data", userData);
+
   const handleUpload = async (e) => {
     e.preventDefault();
+
+    if (title === "" || description === "" || tags === "") {
+      return null;
+    }
 
     try {
       const formData = new FormData();
@@ -20,27 +28,25 @@ const AddItem = () => {
       formData.append("description", description);
       formData.append("tags", tags);
       formData.append("image", fileImg);
+      formData.append("user", userData._id);
+      //console.log("id", userData._id);
 
-      const response = await axios.post(
-        "http://localhost:3005/api/posts",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post(API_URL + "/posts", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      });
 
       if (response) {
-        console.log("response", response);
-
         setTitle("");
         setDescription("");
         setTags("");
         setFileImg(null);
+        setDataChanged(!dataChanged);
       } else {
         console.log("failed");
       }
     } catch (error) {
-      console.log("Errored" + error.message);
+      console.log("Errored! " + error.message);
     }
   };
 
@@ -56,12 +62,12 @@ const AddItem = () => {
       <div
         style={{
           background: "linear-gradient(to right,#4facfe,#b600fe)",
-          padding: "3rem 1rem",
+          padding: "2rem 1rem",
           textAlign: "left",
           color: "white",
         }}
       >
-        <form className="mx-4 px-5 py-4 border rounded text-black bg-white">
+        <form className="mx-4 px-5 py-3 border rounded text-black bg-white">
           <h2>Share the Moments</h2>
 
           <InputGroup className="mb-3">

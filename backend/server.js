@@ -11,7 +11,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 
 const routes = require("./router/routes");
-const auth = require("./middleware/auth");
+const authUser = require("./middleware/auth");
 
 app.use(express.json());
 app.use(cookieParser());

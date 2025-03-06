@@ -14,6 +14,7 @@ export const API_URL = import.meta.env.VITE_SERVER_URL;
 
 export const AppContextProvider = ({ children }) => {
   const [userData, setUserData] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [dataChanged, setDataChanged] = useState(false);
 
   useEffect(() => {
@@ -21,17 +22,31 @@ export const AppContextProvider = ({ children }) => {
 
     if (myCookie) {
       getUserDetails();
+      fetchPosts();
     }
-  }, []);
+  }, [dataChanged]);
 
   const getUserDetails = async () => {
     const response = await axios.get(API_URL + "/profile", {
       withCredentials: true,
     });
 
+    if (response.status === 200) {
+      const data = response.data;
+      // console.log("data", data);
+      setUserData(data);
+    }
+  };
+
+  const fetchPosts = async () => {
+    const response = await axios.get("http://localhost:3005/api/posts");
+
     if (response) {
-      console.log("response data", response.data);
-      setUserData(response.data);
+      const { data } = response;
+      // console.log(data);
+      setPosts(data);
+    } else {
+      console.log("Cannot fetch posts");
     }
   };
 
@@ -40,7 +55,16 @@ export const AppContextProvider = ({ children }) => {
     setUserData([]);
   };
 
-  const contextValues = { userData, setUserData, getUserDetails, handleLogout };
+  const contextValues = {
+    userData,
+    setUserData,
+    dataChanged,
+    setDataChanged,
+    getUserDetails,
+    posts,
+    fetchPosts,
+    handleLogout,
+  };
 
   return (
     <>

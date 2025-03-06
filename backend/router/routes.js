@@ -6,6 +6,7 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const authUser = require("../middleware/auth");
 
 //multer
 const storage = multer.diskStorage({
@@ -14,6 +15,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+//Routes
 router.post("/register", async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
@@ -93,42 +95,43 @@ router.get("/user", async (req, res) => {
   }
 });
 
-router.post("/posts", upload.single("image"), async (req, res) => {
+router.post("/posts", authUser, upload.single("image"), async (req, res) => {
   try {
-    // console.log(req.file);
-
     if (!req.file) {
       return res.status(400).json({ error: "No image uploaded" });
     }
 
     const imageUrl = `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`;
     const imageUpload = new Image({ imageUrl });
-    console.log("imageUpload", imageUpload);
     await imageUpload.save();
 
     const { title, description, tags } = req.body;
+    const userId = req.user._id;
 
-    const dbData = Post.create({
+    const dbData = await Post.create({
       title,
       description,
       tags,
       image: imageUpload._id,
-    }).populate("image");
+      user: userId,
+    });
 
-    if (dbData) {
-      res.status(201).json(dbData);
+    const poppost = await Post.findById(dbData._id).populate("image");
+
+    if (poppost) {
+      res.status(201).json(poppost);
     } else {
       console.log("Post not created");
     }
   } catch (error) {
-    console.log("Error!" + error.message);
+    console.log("Error!!" + error.message);
   }
 });
 
 router.get("/posts", async (req, res) => {
   try {
     const allPosts = await Post.find()
-      .populate("image")
+      .populate(["image", "user"])
       .sort({ createdAt: -1 });
 
     // console.log(allPosts);

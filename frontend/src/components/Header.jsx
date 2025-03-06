@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
-  const { userData, setUserData, handleLogout } = useAppContext();
+  const { userData, handleLogout } = useAppContext();
 
   return (
     <>
@@ -22,19 +22,21 @@ const Header = () => {
               <Nav.Link as={Link} to="/">
                 Home
               </Nav.Link>
-              <Nav.Link>
-                {userData?.firstname ? (
-                  <>
+              {userData?.firstname ? (
+                <>
+                  <Nav.Link>
                     <div className="text-capitalize">
                       Hi,
                       <span className="pe-1">{userData.firstname}</span>
                       {userData.lastname}
                     </div>
-                  </>
-                ) : (
+                  </Nav.Link>
+                </>
+              ) : (
+                <Nav.Link as={Link} to="/auth">
                   <span>Login / Signup</span>
-                )}
-              </Nav.Link>
+                </Nav.Link>
+              )}
 
               {userData?.firstname && (
                 <Nav.Link onClick={handleLogout}>Logout</Nav.Link>

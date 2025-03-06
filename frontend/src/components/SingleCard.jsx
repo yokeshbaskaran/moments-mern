@@ -2,9 +2,7 @@ import { Card, Col } from "react-bootstrap";
 import { getTimeAgo } from "../utlis/helpers";
 
 const SingleCard = ({ post }) => {
-  // console.log("Post", post);
-
-  const { title, description, tags, image, createdAt } = post;
+  const { user, title, description, tags, image, createdAt } = post;
 
   return (
     <>
@@ -19,13 +17,13 @@ const SingleCard = ({ post }) => {
                 height="30"
                 className="rounded-circle me-2"
               />
-              @user_name
+              @{user?.firstname}
             </div>
 
             <span>{getTimeAgo(createdAt)}</span>
           </div>
 
-          <Card.Img variant="top" src={image.imageUrl} alt="moment-image" />
+          <Card.Img variant="top" src={image?.imageUrl} alt="moment-image" />
 
           <Card.Body>
             <div className="my-2">

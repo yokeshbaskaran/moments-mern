@@ -11,7 +11,7 @@ const Cards = () => {
   }, []);
 
   return (
-    <Container fluid className="mt-5">
+    <Container fluid className="mt-4">
       <h2 className="text-center mb-4">Moments Captured in camera</h2>
 
       <Row className="justify-content-center">

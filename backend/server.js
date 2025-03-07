@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
-const PORT = 3005 || process.env.PORT;
+const PORT = 3005;
 
 const fs = require("fs");
 const path = require("path");
@@ -11,16 +11,16 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 
 const routes = require("./router/routes");
-const authUser = require("./middleware/auth");
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://moments-of-photos.onrender.com"],
     credentials: true,
   })
 );
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const uploadDirs = path.join(__dirname, "uploads");
@@ -36,6 +36,16 @@ mongoose
   });
 
 app.use("/api", routes);
+
+// --------------------Deployment---------------
+
+app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
+});
+
+//--------------------Deployment---------------
 
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);

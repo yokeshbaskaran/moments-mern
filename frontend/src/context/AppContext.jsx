@@ -9,7 +9,8 @@ export function useAppContext() {
   return useContext(AppContext);
 }
 
-export const API_URL = import.meta.env.VITE_SERVER_URL;
+//export const API_URL = "http://localhost:3005/api";
+export const API_URL = "https://moments-of-photos.onrender.com/api";
 // console.log(API_URL);
 
 export const AppContextProvider = ({ children }) => {
@@ -39,7 +40,7 @@ export const AppContextProvider = ({ children }) => {
   };
 
   const fetchPosts = async () => {
-    const response = await axios.get("http://localhost:3005/api/posts");
+    const response = await axios.get(API_URL + "/posts");
 
     if (response) {
       const { data } = response;

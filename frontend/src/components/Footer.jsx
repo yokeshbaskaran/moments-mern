@@ -1,10 +1,10 @@
 const Footer = () => {
   return (
-    <div className="mt-3 mx-4 py-3 text-center fs-5 fw-semibold border-top">
-      <span className="foot-text">
-        Made with
-        {`\u{1F49D}`}
-        by Yokesh
+    <div className="mt-3 mx-4 py-3 text-center fs-6 fw-semibold border-top">
+      {/* <span className="d-block">UI Design: C2C </span> */}
+      <span>
+        Capture the moments
+        {`\u{1F49D}`} here
       </span>
     </div>
   );

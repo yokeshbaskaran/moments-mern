@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const authUser = require("../middleware/auth");
 
+// secret: require('crypto').randomBytes(64).toString('hex')
+
 //multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads"),

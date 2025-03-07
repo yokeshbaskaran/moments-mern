@@ -11,9 +11,9 @@ const Header = () => {
     <>
       <Navbar fixed="top" variant="dark" bg="dark" expand="md">
         <Container fluid>
-          <Navbar.Brand className="d-flex align-content-end gap-1">
+          <Navbar.Brand className="d-flex gap-1">
             <img src="camera.png" alt="app-logo" width={32} height={32} />
-            <h2 className="fs-3">Moments</h2>
+            <h2 className="fs-3 ">Moments</h2>
           </Navbar.Brand>
 
           <Navbar.Toggle />

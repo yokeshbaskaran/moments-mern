@@ -122,7 +122,7 @@ const AuthPage = () => {
       {popup.show && <AlertBox color="green" text={popup.message} />}
 
       <div className={auth ? "px-3 py-5" : "px-3 py-4"}>
-        <Card style={auth ? { marginBlock: "50px" } : { marginTop: "30px" }}>
+        <Card style={auth ? { marginBlock: "60px" } : { marginBlock: "40px" }}>
           <Card.Header>
             <h2>{auth ? "Login here" : "Register here "}</h2>
           </Card.Header>

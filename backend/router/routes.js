@@ -1,21 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
+// const multer = require("multer");
 const Image = require("../models/Image");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const authUser = require("../middleware/auth");
+const cloudinary = require("cloudinary").v2;
 
 // secret: require('crypto').randomBytes(64).toString('hex')
 
-//multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads"),
-  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
-});
-const upload = multer({ storage });
+// //multer
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => cb(null, "uploads"),
+//   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
+// });
+// const upload = multer({ storage });
 
 //Routes
 router.post("/register", async (req, res) => {
@@ -97,15 +98,22 @@ router.get("/user", async (req, res) => {
   }
 });
 
-router.post("/posts", authUser, upload.single("image"), async (req, res) => {
+//  upload.single("image"),
+
+router.post("/posts", authUser, async (req, res) => {
   try {
-    if (!req.file) {
+    let { image } = req.body;
+    if (!image) {
       return res.status(400).json({ error: "No image uploaded" });
     }
 
-    const imageUrl = `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`;
-    const imageUpload = new Image({ imageUrl });
-    await imageUpload.save();
+    // const imageUrl = `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`;
+    // const imageUpload = new Image({ imageUrl });
+    // await imageUpload.save();
+
+    const imageUrl = await cloudinary.uploader.upload(image);
+    image = imageUrl.secure_url;
+    // console.log("image", image);
 
     const { title, description, tags } = req.body;
     const userId = req.user._id;
@@ -114,14 +122,14 @@ router.post("/posts", authUser, upload.single("image"), async (req, res) => {
       title,
       description,
       tags,
-      image: imageUpload._id,
+      image,
       user: userId,
     });
 
-    const poppost = await Post.findById(dbData._id).populate("image");
+    // const poppost = await Post.findById(dbData._id).populate("image");
 
-    if (poppost) {
-      res.status(201).json(poppost);
+    if (dbData) {
+      res.status(201).json(dbData);
     } else {
       console.log("Post not created");
     }

@@ -4,8 +4,6 @@ import { getTimeAgo } from "../utlis/helpers";
 const SingleCard = ({ post }) => {
   const { user, title, description, tags, image, createdAt } = post;
 
-  console.log("image-url", image);
-
   return (
     <>
       <Col sm={6} md={4} lg={3} className="mx-md-2 my-2 mb-lg-3">
@@ -25,7 +23,7 @@ const SingleCard = ({ post }) => {
             <span>{getTimeAgo(createdAt)}</span>
           </div>
 
-          <Card.Img variant="top" src={image?.imageUrl} alt="moment-image" />
+          {image && <Card.Img variant="top" src={image} alt="moment-image" />}
 
           <Card.Body>
             <div className="my-2">

@@ -2,6 +2,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
+import Image from "react-bootstrap/Image";
 import { useState } from "react";
 import axios from "axios";
 import { API_URL, useAppContext } from "../context/AppContext";
@@ -10,9 +11,9 @@ const AddItem = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
-  const [fileImg, setFileImg] = useState("");
+  const [image, setImage] = useState(null);
 
-  const { userData, dataChanged, setDataChanged } = useAppContext();
+  const { dataChanged, setDataChanged } = useAppContext();
   // console.log("user-data", userData);
 
   const handleUpload = async (e) => {
@@ -23,24 +24,33 @@ const AddItem = () => {
     }
 
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("tags", tags);
-      formData.append("image", fileImg);
-      formData.append("user", userData._id);
-      //console.log("id", userData._id);
+      // const formData = new FormData();
+      // formData.append("title", title);
+      // formData.append("description", description);
+      // formData.append("tags", tags);
+      // formData.append("image", image);
+      // formData.append("user", userData._id);
+      // //console.log("id", userData._id);
+
+      const formData = {
+        title,
+        description,
+        tags,
+        image,
+      };
 
       const response = await axios.post(API_URL + "/posts", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
 
       if (response) {
+        console.log("formData", formData);
+
         setTitle("");
         setDescription("");
         setTags("");
-        setFileImg(null);
+        setImage(null);
         setDataChanged(!dataChanged);
       } else {
         console.log("failed");
@@ -50,11 +60,22 @@ const AddItem = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleClear = () => {
     setTitle("");
     setDescription("");
     setTags("");
-    setFileImg(null);
+    setImage(null);
   };
 
   return (
@@ -97,11 +118,22 @@ const AddItem = () => {
             />
           </InputGroup>
 
+          {image && (
+            <Image
+              fluid
+              src={image}
+              alt="preview"
+              width={350}
+              height={150}
+              className="py-3"
+            />
+          )}
+
           <input
             type="file"
             name="img-upload"
             accept="image/*"
-            onChange={(e) => setFileImg(e.target.files[0])}
+            onChange={handleFileChange}
             required
           />
 

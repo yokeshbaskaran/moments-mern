@@ -14,8 +14,7 @@ const postSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "image",
+      type: String,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

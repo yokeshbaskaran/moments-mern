@@ -9,7 +9,7 @@ export function useAppContext() {
   return useContext(AppContext);
 }
 
-//export const API_URL = "http://localhost:3005/api";
+// export const API_URL = "http://localhost:3005/api";
 export const API_URL = "https://moments-of-photos.onrender.com/api";
 // console.log(API_URL);
 

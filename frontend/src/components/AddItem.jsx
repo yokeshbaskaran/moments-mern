@@ -45,7 +45,7 @@ const AddItem = () => {
       });
 
       if (response) {
-        console.log("formData", formData);
+        // console.log("formData", formData);
 
         setTitle("");
         setDescription("");
@@ -53,10 +53,10 @@ const AddItem = () => {
         setImage(null);
         setDataChanged(!dataChanged);
       } else {
-        console.log("failed");
+        console.log("Additem failed");
       }
     } catch (error) {
-      console.log("Errored! " + error.message);
+      console.log("Error in additem: " + error.message);
     }
   };
 

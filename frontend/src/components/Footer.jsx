@@ -4,7 +4,7 @@ const Footer = () => {
       {/* <span className="d-block">UI Design: C2C </span> */}
       <span>
         Capture the moments
-        {`\u{1F49D}`} here
+        <span> {`\u{1F49D}`}</span>
       </span>
     </div>
   );

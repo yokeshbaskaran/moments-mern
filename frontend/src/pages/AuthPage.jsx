@@ -54,7 +54,7 @@ const AuthPage = () => {
     } catch (error) {
       // setErrorPopup({ show: true, message: error.message });
       // console.log(error.message);
-      console.log("Login error:" + error);
+      console.log("Error in login:" + error);
     }
   };
 
@@ -96,7 +96,7 @@ const AuthPage = () => {
     } catch (error) {
       // setErrorPopup({ show: true, message: "User not registered" });
       // console.log(error.message);
-      console.log("Login error:" + error);
+      console.log("Error in register:" + error);
     }
   };
 

@@ -11,20 +11,22 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full page height */
-  background: linear-gradient(to right, #4facfe, #b600fe);
-  color: white;
-  font-family: Arial, sans-serif;
+  height: 100vh;
 }
 
-/* Loader Animation */
-.loader {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #fff;
-  border-top: 4px solid #b600fe;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+/* clip text */
+.clip-text {
+  font-size: 20px;
+  font-weight: bold;
+  background: linear-gradient(to right, #4facfe, #b600fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-color {
+  background: linear-gradient(to right, #4facfe, #b600fe);
+  color: white;
+  opacity: 95%;
 }
 
 /* Spin Animation */

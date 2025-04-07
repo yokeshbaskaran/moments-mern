@@ -25,9 +25,9 @@ Moments - Capture the moments and share it with the world!!!
 ✅ Responsive design for mobile and desktop
 ✅ Error handling & toast notifications
 
-- Inspired (UI) by Twitter and Random user. -->
+- Inspired (UI) by Twitter and Random user.
 
----
+--- -->
 
 ## 🚀 Installation & Setup
 

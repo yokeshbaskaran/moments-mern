@@ -150,13 +150,28 @@ router.post("/posts", authUser, async (req, res) => {
 
     // const poppost = await Post.findById(dbData._id).populate("image");
 
-    if (dbData) {
-      res.status(201).json(dbData);
-    } else {
-      console.log("Post not created");
+    if (!dbData) {
+      return res.status(404).json({ error: "Post not created" });
     }
+
+    res.status(201).json(dbData);
   } catch (error) {
     console.log("Error in createPost:" + error.message);
+  }
+});
+
+router.delete("/posts/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findByIdAndDelete(id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json({ message: "Post deleted" });
+  } catch (error) {
+    console.log("Error in deletepost:" + error.message);
   }
 });
 

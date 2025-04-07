@@ -1,21 +1,33 @@
 import { Card, Col } from "react-bootstrap";
 import { getTimeAgo } from "../utlis/helpers";
-import { useAppContext } from "../context/AppContext";
+import { API_URL, useAppContext } from "../context/AppContext";
 import { GoTrash } from "react-icons/go";
 import { LuDot } from "react-icons/lu";
+import axios from "axios";
 
 const SingleCard = ({ post }) => {
-  const { user, title, description, tags, image, createdAt } = post;
+  const { _id, user, title, description, tags, image, createdAt } = post;
 
-  const { userData } = useAppContext();
-  console.log("user", user);
-  console.log("userData", userData);
+  const { userData, dataChanged, setDataChanged } = useAppContext();
+  // console.log("user", user);
+  // console.log("userData", userData);
 
   const isMyProfile = userData?._id === user?.userid;
   // console.log("isMyProfile", isMyProfile);
 
-  const handleDelete = () => {
-    alert("Post deleted");
+  const handleDelete = async (id) => {
+    const postId = id;
+    try {
+      if (confirm("Are you want to delete post")) {
+        const res = await axios.delete(API_URL + `/posts/${postId}`);
+
+        const data = await res.data;
+        setDataChanged(!dataChanged);
+        return data;
+      }
+    } catch (error) {
+      console.log("Error in delete:", error.message);
+    }
   };
 
   return (
@@ -38,7 +50,7 @@ const SingleCard = ({ post }) => {
 
             {userData?.email && (
               <button
-                onClick={handleDelete}
+                onClick={() => handleDelete(_id)}
                 className={`bg-light border-0 rounded-5 ${
                   isMyProfile ? `d-inline` : `d-none`
                 }`}

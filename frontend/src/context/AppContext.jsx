@@ -6,7 +6,11 @@ import Cookies from "js-cookie";
 const AppContext = createContext();
 
 export function useAppContext() {
-  return useContext(AppContext);
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppContext must be used within AppContextProvider");
+  }
+  return context;
 }
 
 // export const API_URL = "http://localhost:3005/api";
@@ -44,10 +48,10 @@ export const AppContextProvider = ({ children }) => {
 
     if (response) {
       const { data } = response;
-      console.log("posts", data);
+      // console.log("posts", data);
       setPosts(data);
     } else {
-      console.log("Cannot fetch posts");
+      console.log("Error in fetchpost:");
     }
   };
 

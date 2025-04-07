@@ -5,6 +5,7 @@ import Cards from "../pages/Cards";
 
 const Home = () => {
   const { userData } = useAppContext();
+  // console.log("userData", userData);
 
   return (
     <div className="my-5 py-2">

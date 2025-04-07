@@ -6,7 +6,7 @@ import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
   const { userData, handleLogout } = useAppContext();
-  console.log("userdata", userData);
+  // console.log("userdata", userData);
 
   return (
     <>

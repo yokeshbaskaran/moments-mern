@@ -1,15 +1,29 @@
 import { Card, Col } from "react-bootstrap";
 import { getTimeAgo } from "../utlis/helpers";
+import { useAppContext } from "../context/AppContext";
+import { GoTrash } from "react-icons/go";
+import { LuDot } from "react-icons/lu";
 
 const SingleCard = ({ post }) => {
   const { user, title, description, tags, image, createdAt } = post;
+
+  const { userData } = useAppContext();
+  console.log("user", user);
+  console.log("userData", userData);
+
+  const isMyProfile = userData?._id === user?.userid;
+  // console.log("isMyProfile", isMyProfile);
+
+  const handleDelete = () => {
+    alert("Post deleted");
+  };
 
   return (
     <>
       <Col sm={6} md={4} lg={3} className="mx-md-2 my-2 mb-lg-3">
         <Card>
-          <div className="d-flex justify-content-between align-items-center m-2">
-            <div>
+          <div className="d-flex justify-content-between align-items-center mx-2 my-2">
+            <div className="d-flex align-items-center">
               <img
                 src="avatar.png"
                 alt="User"
@@ -17,13 +31,33 @@ const SingleCard = ({ post }) => {
                 height="30"
                 className="rounded-circle me-2"
               />
-              @{user?.firstname}
+              @{user?.username}
+              <LuDot />
+              <span>{getTimeAgo(createdAt)}</span>
             </div>
 
-            <span>{getTimeAgo(createdAt)}</span>
+            {userData?.email && (
+              <button
+                onClick={handleDelete}
+                className={`bg-light border-0 rounded-5 ${
+                  isMyProfile ? `d-inline` : `d-none`
+                }`}
+              >
+                <GoTrash size={20} color="red" />
+              </button>
+            )}
           </div>
 
-          {image && <Card.Img variant="top" src={image} alt="moment-image" />}
+          {image && (
+            <Card.Img
+              variant="top"
+              src={image}
+              alt="moment-image"
+              width={250}
+              height={250}
+              style={{ objectFit: "contain" }}
+            />
+          )}
 
           <Card.Body>
             <div className="my-2">

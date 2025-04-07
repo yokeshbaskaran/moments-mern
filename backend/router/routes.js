@@ -21,11 +21,11 @@ const cloudinary = require("cloudinary").v2;
 //Routes
 router.post("/register", async (req, res) => {
   try {
-    const { firstname, lastname, email, password } = req.body;
+    const { username, email, password } = req.body;
     const salt = bcrypt.genSaltSync();
     const hashPwd = bcrypt.hashSync(password, salt);
 
-    const data = { firstname, lastname, email, password: hashPwd };
+    const data = { username, email, password: hashPwd };
     // console.log("client data", data);
 
     const newUser = await User.create(data);
@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
       console.log("User not created!");
     }
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ error: error.message });
     console.log("Error!" + error.message);
   }
 });
@@ -84,21 +84,39 @@ router.get("/profile", async (req, res) => {
   });
 });
 
-router.get("/user", async (req, res) => {
+// router.get("/user", async (req, res) => {
+//   try {
+//     const allPosts = await Post.find()
+//       .populate("image")
+//       .sort({ createdAt: -1 });
+
+//     // console.log(allPosts);
+
+//     res.status(200).json(allPosts);
+//   } catch (error) {
+//     console.log("Error:" + error.message);
+//   }
+// });
+
+//  upload.single("image"),
+
+router.get("/posts", async (req, res) => {
   try {
     const allPosts = await Post.find()
-      .populate("image")
+      .populate(["image", "user"])
       .sort({ createdAt: -1 });
 
-    // console.log(allPosts);
+    if (!allPosts) {
+      return res.status(404).json({ error: "No posts found" });
+    }
+
+    // console.log("allPosts", allPosts);
 
     res.status(200).json(allPosts);
   } catch (error) {
     console.log("Error:" + error.message);
   }
 });
-
-//  upload.single("image"),
 
 router.post("/posts", authUser, async (req, res) => {
   try {
@@ -116,14 +134,18 @@ router.post("/posts", authUser, async (req, res) => {
     // console.log("image", image);
 
     const { title, description, tags } = req.body;
-    const userId = req.user._id;
+    const user = await req.user;
+    // console.log("req.user", user);
 
     const dbData = await Post.create({
       title,
       description,
       tags,
       image,
-      user: userId,
+      user: {
+        userid: user._id,
+        username: user.username,
+      },
     });
 
     // const poppost = await Post.findById(dbData._id).populate("image");
@@ -134,21 +156,7 @@ router.post("/posts", authUser, async (req, res) => {
       console.log("Post not created");
     }
   } catch (error) {
-    console.log("Error!!" + error.message);
-  }
-});
-
-router.get("/posts", async (req, res) => {
-  try {
-    const allPosts = await Post.find()
-      .populate(["image", "user"])
-      .sort({ createdAt: -1 });
-
-    // console.log(allPosts);
-
-    res.status(200).json(allPosts);
-  } catch (error) {
-    console.log("Error:" + error.message);
+    console.log("Error in createPost:" + error.message);
   }
 });
 

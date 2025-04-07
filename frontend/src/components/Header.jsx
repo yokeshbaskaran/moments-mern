@@ -6,6 +6,7 @@ import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
   const { userData, handleLogout } = useAppContext();
+  console.log("userdata", userData);
 
   return (
     <>
@@ -13,7 +14,10 @@ const Header = () => {
         <Container fluid>
           <Navbar.Brand className="d-flex gap-1">
             <img src="camera.png" alt="app-logo" width={32} height={32} />
-            <h2 className="fs-3 ">Moments</h2>
+
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+              <h2 className="fs-3 ">Moments</h2>
+            </Link>
           </Navbar.Brand>
 
           <Navbar.Toggle />
@@ -22,12 +26,12 @@ const Header = () => {
               <Nav.Link as={Link} to="/">
                 Home
               </Nav.Link>
-              {userData?.firstname ? (
+              {userData?.username ? (
                 <>
                   <Nav.Link>
                     <div className="text-capitalize">
                       Hi,
-                      <span className="pe-1">{userData.firstname}</span>
+                      <span className="pe-1">{userData.username}</span>
                       {userData.lastname}
                     </div>
                   </Nav.Link>
@@ -38,7 +42,7 @@ const Header = () => {
                 </Nav.Link>
               )}
 
-              {userData?.firstname && (
+              {userData?.username && (
                 <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
               )}
             </Nav>

@@ -17,8 +17,14 @@ const postSchema = new mongoose.Schema(
       type: String,
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      userid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+      },
+      username: {
+        type: String,
+        required: true,
+      },
     },
   },
   {

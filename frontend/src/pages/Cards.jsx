@@ -15,8 +15,8 @@ const Cards = () => {
       <h2 className="text-center mb-4">Moments Captured in camera</h2>
 
       <Row className="justify-content-center">
-        {posts.length > 0 ? (
-          posts.map((post) => <SingleCard key={post._id} post={post} />)
+        {posts?.length > 0 ? (
+          posts?.map((post) => <SingleCard key={post._id} post={post} />)
         ) : (
           <div className="w-100 my-2 d-flex flex-column justify-content-center align-items-center gap-2">
             <img src="photos.png" alt="home-logo" width={350} height={350} />

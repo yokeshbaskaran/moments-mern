@@ -4,8 +4,6 @@ const express = require("express");
 const app = express();
 const PORT = 3005 || process.env.PORT;
 
-// const fs = require("fs");
-const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
@@ -29,13 +27,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// const uploadDirs = path.join(__dirname, "uploads");
-// if (!fs.existsSync(uploadDirs)) {
-//   fs.mkdirSync(uploadDirs);
-// }
-
 mongoose
   .connect(process.env.MONGO_DB_URL)
   .then(() => console.log("MongoDB connected!"))
@@ -46,6 +37,8 @@ mongoose
 app.use("/api", routes);
 
 // --------------------Deployment---------------
+
+const path = require("path");
 
 app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
 

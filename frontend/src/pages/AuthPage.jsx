@@ -13,8 +13,8 @@ const AuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+  const [username, setUsername] = useState("");
+  // const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -60,22 +60,18 @@ const AuthPage = () => {
 
   const handleRegister = async () => {
     try {
-      if (
-        firstname === "" ||
-        lastname === "" ||
-        email === "" ||
-        password === ""
-      ) {
+      if (username === "" || email === "" || password === "") {
         return null;
       }
 
       if (password == confirmPassword) {
         const data = {
-          firstname,
-          lastname,
+          username,
           email,
           password,
         };
+
+        // console.log("user-data", data);
 
         const response = await axios.post(API_URL + "/register", data);
 
@@ -83,8 +79,8 @@ const AuthPage = () => {
           setPopup({ show: true, message: "User register success" });
 
           setTimeout(() => {
-            setFirstname("");
-            setLastname("");
+            setUsername("");
+            // setLastname("");
             setEmail("");
             setPassword("");
             setConfirmPassword("");
@@ -131,21 +127,12 @@ const AuthPage = () => {
             <Form onSubmit={handleSubmit}>
               {!auth && (
                 <Row>
-                  <Form.Group className="mb-3 col-md-6">
-                    <Form.Label>First Name</Form.Label>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Username</Form.Label>
                     <Form.Control
                       type="text"
-                      value={firstname}
-                      onChange={(e) => setFirstname(e.target.value)}
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3 col-md-6">
-                    <Form.Label>Last Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={lastname}
-                      onChange={(e) => setLastname(e.target.value)}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </Form.Group>
                 </Row>

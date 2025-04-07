@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <div className="my-5 py-2">
-      {userData.firstname ? <AddItem /> : <Box />}
+      {userData?.username ? <AddItem /> : <Box />}
 
       <Cards />
     </div>

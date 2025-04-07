@@ -10,8 +10,8 @@ export function useAppContext() {
 }
 
 // export const API_URL = "http://localhost:3005/api";
-export const API_URL = "https://moments-of-photos.onrender.com/api";
-// console.log(API_URL);
+export const API_URL = import.meta.env.VITE_SERVER_API_URL;
+// console.log("API_URL", API_URL);
 
 export const AppContextProvider = ({ children }) => {
   const [userData, setUserData] = useState([]);
@@ -44,7 +44,7 @@ export const AppContextProvider = ({ children }) => {
 
     if (response) {
       const { data } = response;
-      // console.log(data);
+      console.log("posts", data);
       setPosts(data);
     } else {
       console.log("Cannot fetch posts");
